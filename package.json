@@ -1,0 +1,13 @@
+{
+  "name": "socrates",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "소크라테스와 문답하는 웹 페이지",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.12.0"
+  }
+}
