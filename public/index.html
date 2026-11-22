@@ -11,86 +11,58 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f6f1e7;
-    --paper: #fffdf8;
-    --ink: #2a2520;
-    --soft: #6f665b;
-    --faint: #a89f92;
-    --line: #e4dccd;
-    --you: #ebe3d3;
-    --accent: #8a5a2b;
-    --accent-ink: #fffaf2;
-    --danger: #a23b2a;
+    --bg: #f6f1e7; --paper: #fffdf8; --ink: #2a2520; --soft: #6f665b; --faint: #a89f92;
+    --line: #e4dccd; --you: #ebe3d3; --accent: #8a5a2b; --accent-ink: #fffaf2; --danger: #a23b2a; --ok: #4f6b3a;
     --serif: "Noto Serif KR", "AppleMyungjo", "Nanum Myeongjo", serif;
     --sans: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #1b1916;
-      --paper: #24211d;
-      --ink: #ece5d8;
-      --soft: #b3a998;
-      --faint: #7d7466;
-      --line: #36312a;
-      --you: #332e27;
-      --accent: #d29a5f;
-      --accent-ink: #1b1916;
-      --danger: #e0806e;
+      --bg: #1b1916; --paper: #24211d; --ink: #ece5d8; --soft: #b3a998; --faint: #7d7466;
+      --line: #36312a; --you: #332e27; --accent: #d29a5f; --accent-ink: #1b1916; --danger: #e0806e; --ok: #a5c38d;
     }
   }
   * { box-sizing: border-box; }
   html, body { height: 100%; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--sans);
-    -webkit-text-size-adjust: 100%;
-  }
-  .app {
-    max-width: 720px;
-    margin: 0 auto;
-    min-height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); -webkit-text-size-adjust: 100%; }
+  .app { max-width: 720px; margin: 0 auto; min-height: 100%; display: flex; flex-direction: column; }
+  [hidden] { display: none !important; }
 
   header {
     position: sticky; top: 0; z-index: 5;
     background: color-mix(in srgb, var(--bg) 92%, transparent);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--line);
-    padding: calc(10px + env(safe-area-inset-top)) 16px 10px;
-    display: flex; align-items: center; gap: 12px;
+    padding: calc(10px + env(safe-area-inset-top)) 16px 0;
   }
+  .top { display: flex; align-items: center; gap: 8px; }
   .title { flex: 1; min-width: 0; }
-  .title h1 {
-    margin: 0; font-family: var(--serif); font-weight: 600;
-    font-size: 20px; letter-spacing: 0.02em;
-  }
+  .title h1 { margin: 0; font-family: var(--serif); font-weight: 600; font-size: 20px; letter-spacing: 0.02em; }
   .title p { margin: 2px 0 0; font-size: 12px; color: var(--soft); }
+  .tabs { display: flex; gap: 4px; margin-top: 8px; }
+  .tab {
+    appearance: none; border: 0; background: none; color: var(--soft); font: inherit; font-size: 15px;
+    padding: 8px 12px 10px; cursor: pointer; border-bottom: 2px solid transparent;
+  }
+  .tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); font-weight: 600; }
   .btn {
-    appearance: none; border: 1px solid var(--line); background: var(--paper);
-    color: var(--ink); font: inherit; font-size: 14px;
-    padding: 8px 12px; border-radius: 999px; cursor: pointer; white-space: nowrap;
+    appearance: none; border: 1px solid var(--line); background: var(--paper); color: var(--ink);
+    font: inherit; font-size: 14px; padding: 7px 12px; border-radius: 999px; cursor: pointer; white-space: nowrap;
   }
   .btn:hover { border-color: var(--faint); }
-  .btn:focus-visible, textarea:focus-visible, .chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .btn:disabled { opacity: 0.5; cursor: default; }
+  .linkish { appearance: none; border: 0; background: none; color: var(--accent); font: inherit; font-size: 14px; cursor: pointer; padding: 4px 0; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   main { flex: 1; padding: 20px 16px 8px; }
   .turn { margin: 0 0 22px; }
   .who { font-size: 12px; color: var(--soft); margin-bottom: 6px; letter-spacing: 0.04em; }
-  .socrates .text {
-    font-family: var(--serif); font-size: 18px; line-height: 1.85;
-    white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere;
-  }
+  .socrates .text { font-family: var(--serif); font-size: 18px; line-height: 1.85; white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere; }
   .you { display: flex; flex-direction: column; align-items: flex-end; }
   .you .text {
-    background: var(--you); border-radius: 18px 18px 4px 18px;
-    padding: 10px 14px; max-width: 85%;
-    font-size: 16px; line-height: 1.65; white-space: pre-wrap;
-    word-break: keep-all; overflow-wrap: anywhere;
+    background: var(--you); border-radius: 18px 18px 4px 18px; padding: 10px 14px; max-width: 85%;
+    font-size: 16px; line-height: 1.65; white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere;
   }
   .thinking { color: var(--faint); font-family: var(--serif); font-size: 16px; }
   .thinking span { animation: blink 1.4s infinite both; }
@@ -98,67 +70,73 @@
   .thinking span:nth-child(3) { animation-delay: 0.4s; }
   @keyframes blink { 0%, 80%, 100% { opacity: 0.2; } 40% { opacity: 1; } }
   .note { font-size: 14px; color: var(--danger); margin: -8px 0 18px; }
+  .okmsg { font-size: 13px; color: var(--ok); }
+
+  .fb { margin-top: 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 13px; color: var(--faint); }
+  .fb .mini { appearance: none; border: 1px solid var(--line); background: none; color: var(--soft); font: inherit; font-size: 13px; padding: 3px 10px; border-radius: 999px; cursor: pointer; }
+  .fb .mini:hover { border-color: var(--accent); color: var(--ink); }
+  .fb .mini.on { background: var(--you); color: var(--ink); }
+  .fb-more { display: flex; gap: 6px; width: 100%; margin-top: 4px; }
+  .fb-more input { flex: 1; min-width: 0; font: inherit; font-size: 14px; padding: 7px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); }
 
   .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 22px; }
-  .chip {
-    appearance: none; border: 1px solid var(--line); background: var(--paper); color: var(--ink);
-    font: inherit; font-size: 14px; padding: 8px 12px; border-radius: 999px; cursor: pointer;
-  }
+  .chip { appearance: none; border: 1px solid var(--line); background: var(--paper); color: var(--ink); font: inherit; font-size: 14px; padding: 8px 12px; border-radius: 999px; cursor: pointer; }
   .chip:hover { border-color: var(--accent); }
+  .tobook { margin: 4px 0 18px; text-align: center; }
 
   footer {
-    position: sticky; bottom: 0;
-    background: color-mix(in srgb, var(--bg) 94%, transparent);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    padding: 10px 16px calc(12px + env(safe-area-inset-bottom));
-    border-top: 1px solid var(--line);
+    position: sticky; bottom: 0; background: color-mix(in srgb, var(--bg) 94%, transparent);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    padding: 10px 16px calc(12px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line);
   }
-  .composer {
-    display: flex; align-items: flex-end; gap: 8px;
-    background: var(--paper); border: 1px solid var(--line); border-radius: 22px;
-    padding: 6px 6px 6px 14px;
-  }
-  textarea {
-    flex: 1; border: 0; outline: none; resize: none; background: transparent; color: var(--ink);
-    font: inherit; font-size: 16px; line-height: 1.5; padding: 7px 0; max-height: 40vh;
-  }
-  textarea::placeholder { color: var(--faint); }
-  .send {
-    appearance: none; border: 0; background: var(--accent); color: var(--accent-ink);
-    width: 38px; height: 38px; border-radius: 50%; cursor: pointer; flex: none;
-    display: grid; place-items: center;
-  }
+  .composer { display: flex; align-items: flex-end; gap: 8px; background: var(--paper); border: 1px solid var(--line); border-radius: 22px; padding: 6px 6px 6px 14px; }
+  textarea { font: inherit; color: var(--ink); }
+  .composer textarea { flex: 1; border: 0; outline: none; resize: none; background: transparent; font-size: 16px; line-height: 1.5; padding: 7px 0; max-height: 40vh; }
+  textarea::placeholder, input::placeholder { color: var(--faint); }
+  .send { appearance: none; border: 0; background: var(--accent); color: var(--accent-ink); width: 38px; height: 38px; border-radius: 50%; cursor: pointer; flex: none; display: grid; place-items: center; }
   .send:disabled { opacity: 0.35; cursor: default; }
-  .hint { font-size: 12px; color: var(--faint); margin: 6px 4px 0; }
+  .hint { font-size: 12px; color: var(--faint); margin: 6px 4px 0; line-height: 1.5; }
 
-  /* 지난 문답 */
-  .drawer-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 20; display: none; }
-  .drawer {
-    position: fixed; top: 0; right: 0; bottom: 0; width: min(360px, 88vw); z-index: 21;
-    background: var(--paper); border-left: 1px solid var(--line);
-    padding: calc(16px + env(safe-area-inset-top)) 16px 16px; overflow-y: auto;
-    transform: translateX(100%); transition: transform 0.2s ease;
-  }
-  .open .drawer-bg { display: block; }
-  .open .drawer { transform: none; }
-  .drawer h2 { font-family: var(--serif); font-size: 18px; margin: 0 0 12px; }
-  .past { display: block; width: 100%; text-align: left; border: 0; border-bottom: 1px solid var(--line);
-    background: none; color: var(--ink); font: inherit; padding: 12px 2px; cursor: pointer; }
-  .past small { display: block; color: var(--soft); font-size: 12px; margin-top: 3px; }
-  .past.now { color: var(--accent); }
+  /* 마음 · 문답집 */
+  .page { padding: 20px 16px 40px; }
+  .lead { font-size: 15px; line-height: 1.75; color: var(--soft); margin: 0 0 18px; word-break: keep-all; }
+  .card { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-bottom: 18px; }
+  .card h2 { font-family: var(--serif); font-size: 17px; margin: 0 0 10px; }
+  .meta { font-size: 12px; color: var(--soft); }
+  .mind { font-family: var(--serif); font-size: 15.5px; line-height: 1.85; word-break: keep-all; overflow-wrap: anywhere; }
+  .mind h3 { font-size: 16px; margin: 18px 0 6px; }
+  .mind p { margin: 0 0 10px; }
+  .mind ul, .mind ol { margin: 0 0 10px; padding-left: 20px; }
+  .mind li { margin-bottom: 6px; }
+  .field { display: block; margin-bottom: 10px; }
+  .field span { display: block; font-size: 13px; color: var(--soft); margin-bottom: 4px; }
+  .field input, .field textarea { width: 100%; font-size: 16px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+  .field textarea { min-height: 110px; resize: vertical; line-height: 1.6; }
+  .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .hist { border-top: 1px solid var(--line); padding: 10px 0; }
+  .hist:first-of-type { border-top: 0; }
+  .hist b { font-weight: 600; }
+  .hist .why { font-size: 14px; margin-top: 3px; line-height: 1.6; }
+  .item { display: block; width: 100%; text-align: left; background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; color: var(--ink); font: inherit; cursor: pointer; }
+  .item:hover { border-color: var(--faint); }
+  .item strong { font-family: var(--serif); font-size: 16px; display: block; margin-bottom: 4px; }
+  .item p { margin: 6px 0 0; font-size: 14px; color: var(--soft); line-height: 1.6; }
   .empty { color: var(--soft); font-size: 14px; }
 
-  /* 문 */
+  /* 서랍 · 창 */
+  .shade { position: fixed; inset: 0; background: rgba(0,0,0,0.32); z-index: 20; }
+  .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(360px, 88vw); z-index: 21; background: var(--paper); border-left: 1px solid var(--line); padding: calc(16px + env(safe-area-inset-top)) 16px 16px; overflow-y: auto; }
+  .drawer h2, .modal h2 { font-family: var(--serif); font-size: 18px; margin: 0 0 12px; }
+  .past { display: block; width: 100%; text-align: left; border: 0; border-bottom: 1px solid var(--line); background: none; color: var(--ink); font: inherit; padding: 12px 2px; cursor: pointer; }
+  .past small { display: block; color: var(--soft); font-size: 12px; margin-top: 3px; }
+  .past.now { color: var(--accent); }
+  .modal { position: fixed; z-index: 21; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(460px, calc(100vw - 32px)); max-height: calc(100vh - 32px); overflow-y: auto; background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 18px; }
+
   .door { max-width: 360px; margin: 18vh auto 0; padding: 0 16px; text-align: center; }
   .door h1 { font-family: var(--serif); font-weight: 600; }
   .door p { color: var(--soft); }
-  .door input {
-    width: 100%; font: inherit; font-size: 16px; padding: 12px 14px; border-radius: 12px;
-    border: 1px solid var(--line); background: var(--paper); color: var(--ink); margin: 8px 0;
-  }
-  .door .btn { width: 100%; padding: 12px; background: var(--accent); color: var(--accent-ink); border: 0; }
-  [hidden] { display: none !important; }
+  .door input { width: 100%; font: inherit; font-size: 16px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); margin: 8px 0; }
+  .door .btn { width: 100%; padding: 12px; }
 </style>
 </head>
 <body>
@@ -168,172 +146,261 @@
   <p>들어오려면 비밀번호를 말해 주게.</p>
   <form id="doorForm">
     <input id="doorPw" type="password" autocomplete="current-password" placeholder="비밀번호" aria-label="비밀번호">
-    <button class="btn" type="submit">들어가기</button>
+    <button class="btn primary" type="submit">들어가기</button>
     <p class="note" id="doorNote" hidden></p>
   </form>
 </div>
 
 <div class="app" id="app" hidden>
   <header>
-    <div class="title">
-      <h1>소크라테스</h1>
-      <p>검토하지 않은 삶은 살 가치가 없다</p>
+    <div class="top">
+      <div class="title">
+        <h1>소크라테스</h1>
+        <p>누구든 함께 만드는 소크라테스</p>
+      </div>
+      <button class="btn" id="pastBtn" type="button">지난 문답</button>
+      <button class="btn" id="newBtn" type="button">새 문답</button>
     </div>
-    <button class="btn" id="pastBtn" type="button">지난 문답</button>
-    <button class="btn" id="newBtn" type="button">새 문답</button>
+    <nav class="tabs" role="tablist">
+      <button class="tab" role="tab" data-tab="talk" type="button">문답</button>
+      <button class="tab" role="tab" data-tab="mind" type="button">소크라테스의 마음</button>
+      <button class="tab" role="tab" data-tab="book" type="button">문답집</button>
+    </nav>
   </header>
 
-  <main id="log" aria-live="polite"></main>
+  <!-- 문답 -->
+  <section id="talk" class="view">
+    <main id="log" aria-live="polite"></main>
+  </section>
 
-  <footer>
+  <!-- 마음 -->
+  <section id="mindView" class="view page" hidden>
+    <p class="lead">이 소크라테스는 누구든 함께 만든다. 아래 글이 지금 소크라테스의 마음이다. 소크라테스는 이 글을 읽고 자네와 이야기한다. 고칠 점이 보이면 제안해 주게. 원장님이 읽고 받아들이면, 소크라테스의 마음이 새 판으로 바뀐다.</p>
+    <div class="card">
+      <h2>제안하기</h2>
+      <form id="propForm">
+        <label class="field"><span>무엇을 어떻게 고치면 좋을까?</span>
+          <textarea id="propText" maxlength="3000" placeholder="예) 소크라테스가 너무 빨리 모순을 짚어요. 상대의 말을 한 번 더 듣고 물어 주면 좋겠어요."></textarea></label>
+        <label class="field"><span>이름 (안 써도 된다. 받아들여지면 마음의 역사에 남는다)</span>
+          <input id="propName" maxlength="40" autocomplete="nickname"></label>
+        <div class="row"><button class="btn primary" type="submit">제안 보내기</button><span id="propMsg" class="okmsg"></span></div>
+      </form>
+    </div>
+    <div class="card">
+      <h2 id="mindTitle">지금의 마음</h2>
+      <div class="meta" id="mindMeta"></div>
+      <div class="mind" id="mindBody"></div>
+    </div>
+    <div class="card">
+      <h2>마음의 역사</h2>
+      <div id="mindHistory"></div>
+    </div>
+  </section>
+
+  <!-- 문답집 -->
+  <section id="bookView" class="view page" hidden>
+    <p class="lead">함께 나눈 문답 가운데, 쓴 사람이 올리고 원장님이 고른 것들이다. 다른 사람이 소크라테스와 어떻게 생각을 따라갔는지 읽어 보게.</p>
+    <div id="bookList"></div>
+  </section>
+  <section id="bookRead" class="view page" hidden>
+    <button class="linkish" id="bookBack" type="button">← 문답집</button>
+    <h2 id="bookTitle" style="font-family:var(--serif);font-size:20px;margin:10px 0 4px"></h2>
+    <div class="meta" id="bookMeta" style="margin-bottom:20px"></div>
+    <div id="bookLog"></div>
+  </section>
+
+  <footer id="composerWrap">
     <form class="composer" id="form">
       <textarea id="input" rows="1" placeholder="자네 생각을 말해 주게" aria-label="할 말"></textarea>
       <button class="send" id="send" type="submit" aria-label="보내기" disabled>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
       </button>
     </form>
-    <p class="hint">아이폰에서는 키보드의 마이크를 눌러 말로 해도 된다.</p>
+    <p class="hint">문답은 서버에 남고, 소크라테스를 고치려고 원장님이 읽을 수 있다. 아이폰에서는 키보드의 마이크로 말해도 된다.</p>
   </footer>
 </div>
 
-<div id="drawerWrap">
-  <div class="drawer-bg" id="drawerBg"></div>
+<div id="pastWrap" hidden>
+  <div class="shade" data-close></div>
   <aside class="drawer" aria-label="지난 문답">
     <h2>지난 문답</h2>
     <div id="pastList"></div>
   </aside>
 </div>
 
+<div id="bookWrap" hidden>
+  <div class="shade" data-close></div>
+  <div class="modal" role="dialog" aria-label="문답집에 올리기">
+    <h2>문답집에 올리기</h2>
+    <p class="lead" style="font-size:14px">이 문답을 다른 사람도 읽을 수 있게 올린다. 원장님이 읽고 고른 뒤에 실린다. 이름이나 사적인 이야기가 들어 있으면 올리지 말아 주게.</p>
+    <form id="bookForm">
+      <label class="field"><span>제목</span><input id="bookTitleIn" maxlength="80" placeholder="예) 용기는 두려움이 없는 것인가"></label>
+      <label class="field"><span>이름 (안 써도 된다)</span><input id="bookName" maxlength="40" autocomplete="nickname"></label>
+      <label class="field"><span>한마디 (안 써도 된다)</span><input id="bookNote" maxlength="500" placeholder="이 문답에서 무엇을 알게 되었나"></label>
+      <div class="row"><button class="btn primary" type="submit">올리기</button><button class="btn" type="button" data-close>그만두기</button><span id="bookMsg" class="note" style="margin:0"></span></div>
+    </form>
+  </div>
+</div>
+
 <script>
 (() => {
   const GREETING = "어서 오게. 나는 아는 것이 없는 사람일세. 그래서 묻는 것밖에 할 줄 모르지.\n\n오늘은 무엇에 대해 이야기해 볼까? 자네가 옳다고 믿는 것 하나를 말해 주어도 좋고, 요즘 마음에 걸리는 물음 하나를 꺼내도 좋네.";
-  const TOPICS = [
-    "용기란 무엇일까?",
-    "좋은 삶이란 무엇일까?",
-    "인정받는다는 것은 무엇일까?",
-    "기억이란 무엇일까?",
-    "AI도 생각할 수 있을까?",
-  ];
+  const TOPICS = ["용기란 무엇일까?", "좋은 삶이란 무엇일까?", "인정받는다는 것은 무엇일까?", "기억이란 무엇일까?", "AI도 생각할 수 있을까?"];
 
   const $ = (id) => document.getElementById(id);
-  const log = $("log"), input = $("input"), send = $("send"), form = $("form");
+  const log = $("log"), input = $("input"), send = $("send");
 
-  // ── 이 브라우저에만 남는 것(지난 문답 목록) ──
   const store = {
     get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } },
     set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
   };
-  const newId = () => {
-    const a = new Uint8Array(12);
-    crypto.getRandomValues(a);
-    return Array.from(a, (b) => b.toString(16).padStart(2, "0")).join("");
-  };
+  const newId = () => { const a = new Uint8Array(12); crypto.getRandomValues(a); return Array.from(a, (b) => b.toString(16).padStart(2, "0")).join(""); };
+  const fmtDate = (s) => new Date(s).toLocaleString("ko-KR", { year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "2-digit" });
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  async function api(path, opts = {}) {
+    const r = await fetch(path, { ...opts, headers: { "Content-Type": "application/json", ...(opts.headers || {}) } });
+    if (r.status === 401) { showDoor(); throw new Error("문이 닫혀 있네."); }
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(j.error || "문제가 생겼네.");
+    return j;
+  }
+  const post = (path, body) => api(path, { method: "POST", body: JSON.stringify(body) });
 
   let convId = store.get("socrates.current", null) || newId();
   let busy = false;
+  let turns = 0;
 
-  function remember(title) {
-    const list = store.get("socrates.list", []);
-    const i = list.findIndex((c) => c.id === convId);
-    const now = new Date().toISOString();
-    if (i >= 0) { list[i].updated = now; }
-    else { list.unshift({ id: convId, title: title.slice(0, 40), updated: now }); }
-    list.sort((a, b) => (b.updated > a.updated ? 1 : -1));
-    store.set("socrates.list", list.slice(0, 100));
-    store.set("socrates.current", convId);
+  // ── 탭 ──
+  function go(tab) {
+    for (const b of document.querySelectorAll(".tab")) b.setAttribute("aria-selected", String(b.dataset.tab === tab.split("/")[0]));
+    $("talk").hidden = tab !== "talk";
+    $("composerWrap").hidden = tab !== "talk";
+    $("pastBtn").hidden = $("newBtn").hidden = tab !== "talk";
+    $("mindView").hidden = tab !== "mind";
+    $("bookView").hidden = tab !== "book";
+    $("bookRead").hidden = !tab.startsWith("book/");
+    if (tab === "mind") loadMind();
+    if (tab === "book") loadBook();
+    if (tab.startsWith("book/")) readBook(tab.slice(5));
+    window.scrollTo({ top: tab === "talk" ? document.body.scrollHeight : 0 });
   }
+  for (const b of document.querySelectorAll(".tab")) b.onclick = () => { location.hash = b.dataset.tab === "talk" ? "" : b.dataset.tab; };
+  window.addEventListener("hashchange", () => go(location.hash.slice(1) || "talk"));
 
-  // ── 그리기 ──
-  function addTurn(role, text) {
+  // ── 문답 그리기 ──
+  function addTurn(box, role, text, asker = "나") {
     const div = document.createElement("div");
     div.className = "turn " + (role === "user" ? "you" : "socrates");
-    const who = document.createElement("div");
-    who.className = "who";
-    who.textContent = role === "user" ? "나" : "소크라테스";
-    const t = document.createElement("div");
-    t.className = "text";
-    t.textContent = text;
-    div.append(who, t);
-    log.append(div);
-    return { div, t };
+    div.innerHTML = '<div class="who"></div><div class="text"></div>';
+    div.querySelector(".who").textContent = role === "user" ? asker : "소크라테스";
+    div.querySelector(".text").textContent = text;
+    box.append(div);
+    return { div, t: div.querySelector(".text") };
+  }
+
+  function addFeedback(div, turn) {
+    const fb = document.createElement("div");
+    fb.className = "fb";
+    fb.innerHTML = '<span>소크라테스다웠나?</span><button class="mini" type="button" data-v="좋음">그렇다</button><button class="mini" type="button" data-v="아님">아니다</button>';
+    let verdict = null;
+    fb.querySelectorAll(".mini").forEach((b) => b.onclick = () => {
+      verdict = b.dataset.v;
+      fb.querySelectorAll(".mini").forEach((x) => x.classList.toggle("on", x === b));
+      if (!fb.querySelector(".fb-more")) {
+        const more = document.createElement("form");
+        more.className = "fb-more";
+        more.innerHTML = '<input maxlength="1000" placeholder="한마디 (안 써도 된다)"><button class="mini" type="submit">남기기</button>';
+        more.onsubmit = async (e) => {
+          e.preventDefault();
+          try {
+            await post("/api/feedback", { id: convId, turn, verdict, text: more.querySelector("input").value });
+            fb.innerHTML = '<span class="okmsg">고맙네. 원장님께 전하겠네.</span>';
+          } catch (err) { fb.insertAdjacentHTML("beforeend", `<span class="note" style="margin:0">${esc(err.message)}</span>`); }
+        };
+        fb.append(more);
+        more.querySelector("input").focus();
+      }
+    });
+    div.append(fb);
   }
 
   function addChips() {
     const wrap = document.createElement("div");
-    wrap.className = "chips";
-    wrap.id = "chips";
+    wrap.className = "chips"; wrap.id = "chips";
     for (const topic of TOPICS) {
       const b = document.createElement("button");
-      b.type = "button";
-      b.className = "chip";
-      b.textContent = topic;
-      b.onclick = () => talk(topic);
+      b.type = "button"; b.className = "chip"; b.textContent = topic; b.onclick = () => talk(topic);
       wrap.append(b);
     }
     log.append(wrap);
   }
 
+  function addBookButton() {
+    $("tobook")?.remove();
+    if (turns < 4) return;
+    const d = document.createElement("div");
+    d.className = "tobook"; d.id = "tobook";
+    d.innerHTML = '<button class="linkish" type="button">이 문답을 문답집에 올리기</button>';
+    d.querySelector("button").onclick = () => { $("bookMsg").textContent = ""; $("bookWrap").hidden = false; $("bookTitleIn").focus(); };
+    log.append(d);
+  }
+
   function note(msg) {
     const p = document.createElement("p");
-    p.className = "note";
-    p.textContent = msg;
+    p.className = "note"; p.textContent = msg;
     log.append(p);
     scrollDown();
   }
-
-  function scrollDown() {
-    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-  }
+  const scrollDown = () => window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
 
   function render(view) {
     log.innerHTML = "";
-    addTurn("assistant", GREETING);
+    addTurn(log, "assistant", GREETING);
     if (!view.length) addChips();
-    for (const m of view) addTurn(m.role, m.text);
+    view.forEach((m, i) => {
+      const { div } = addTurn(log, m.role, m.text);
+      if (m.role === "assistant") addFeedback(div, i);
+    });
+    turns = view.length;
+    addBookButton();
     window.scrollTo({ top: document.body.scrollHeight });
   }
 
   async function loadConversation() {
-    try {
-      const r = await fetch("/api/conversations/" + encodeURIComponent(convId));
-      if (r.status === 401) return showDoor();
-      const j = await r.json();
-      render(j.view || []);
-    } catch {
-      render([]);
-    }
+    try { const j = await api("/api/conversations/" + encodeURIComponent(convId)); render(j.view || []); }
+    catch { render([]); }
+  }
+
+  function remember(title) {
+    const list = store.get("socrates.list", []);
+    const i = list.findIndex((c) => c.id === convId);
+    const t = new Date().toISOString();
+    if (i >= 0) list[i].updated = t; else list.unshift({ id: convId, title: title.slice(0, 40), updated: t });
+    list.sort((a, b) => (b.updated > a.updated ? 1 : -1));
+    store.set("socrates.list", list.slice(0, 100));
+    store.set("socrates.current", convId);
   }
 
   // ── 말하기 ──
   async function talk(text) {
     text = text.trim();
     if (!text || busy) return;
-    busy = true;
-    updateSend();
-    $("chips")?.remove();
+    busy = true; updateSend();
+    $("chips")?.remove(); $("tobook")?.remove();
     log.querySelectorAll(".note").forEach((n) => n.remove());
 
-    const mine = addTurn("user", text);
-    input.value = "";
-    autoGrow();
-
-    const his = addTurn("assistant", "");
+    const mine = addTurn(log, "user", text);
+    input.value = ""; autoGrow();
+    const his = addTurn(log, "assistant", "");
     his.t.innerHTML = '<span class="thinking"><span>·</span><span>·</span><span>·</span></span>';
     scrollDown();
 
-    let got = "";
-    let failed = null;
+    let got = "", failed = null, turn = null;
     try {
-      const r = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: convId, text }),
-      });
+      const r = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: convId, text }) });
       if (r.status === 401) { showDoor(); return; }
-      if (!r.ok || !r.body) {
-        const j = await r.json().catch(() => ({}));
-        throw new Error(j.error || "말이 전해지지 않았네.");
-      }
+      if (!r.ok || !r.body) { const j = await r.json().catch(() => ({})); throw new Error(j.error || "말이 전해지지 않았네."); }
       const reader = r.body.getReader();
       const dec = new TextDecoder();
       let buf = "";
@@ -343,117 +410,174 @@
         buf += dec.decode(value, { stream: true });
         let nl;
         while ((nl = buf.indexOf("\n")) >= 0) {
-          const line = buf.slice(0, nl);
-          buf = buf.slice(nl + 1);
+          const line = buf.slice(0, nl); buf = buf.slice(nl + 1);
           if (!line.trim()) continue;
           const ev = JSON.parse(line);
-          if (ev.type === "text") {
-            got += ev.text;
-            his.t.textContent = got;
-          } else if (ev.type === "error") {
-            failed = ev.message;
-          }
+          if (ev.type === "text") { got += ev.text; his.t.textContent = got; }
+          else if (ev.type === "error") failed = ev.message;
+          else if (ev.type === "done") turn = ev.turn;
         }
       }
-      if (!failed && !got) failed = "대답이 비어 있네. 다시 말해 주겠나?";
-    } catch (e) {
-      failed = e.message || "말이 전해지지 않았네.";
-    }
+      if (!failed && turn === null) failed = "대답이 끊겼네. 다시 말해 주겠나?";
+    } catch (e) { failed = e.message || "말이 전해지지 않았네."; }
 
     if (failed) {
-      his.div.remove();
-      mine.div.remove();
-      input.value = text;
-      autoGrow();
+      his.div.remove(); mine.div.remove();
+      input.value = text; autoGrow();
       note(failed);
       if (!log.querySelector(".you")) addChips();
     } else {
+      addFeedback(his.div, turn);
+      turns = turn + 1;
       remember(text);
     }
-    busy = false;
-    updateSend();
+    addBookButton();
+    busy = false; updateSend();
     scrollDown();
   }
 
-  form.addEventListener("submit", (e) => { e.preventDefault(); talk(input.value); });
+  $("form").addEventListener("submit", (e) => { e.preventDefault(); talk(input.value); });
   input.addEventListener("keydown", (e) => {
-    // 한글 입력 중(조합 중)의 Enter 는 보내지 않는다.
+    // 한글 조합 중의 Enter 는 보내지 않는다. 폰에서는 Enter 가 줄바꿈이다.
     if (e.key === "Enter" && !e.shiftKey && !e.isComposing && e.keyCode !== 229 && !matchMedia("(pointer: coarse)").matches) {
-      e.preventDefault();
-      talk(input.value);
+      e.preventDefault(); talk(input.value);
     }
   });
-  function autoGrow() {
-    input.style.height = "auto";
-    input.style.height = Math.min(input.scrollHeight, window.innerHeight * 0.4) + "px";
-    updateSend();
-  }
+  function autoGrow() { input.style.height = "auto"; input.style.height = Math.min(input.scrollHeight, innerHeight * 0.4) + "px"; updateSend(); }
   function updateSend() { send.disabled = busy || !input.value.trim(); }
   input.addEventListener("input", autoGrow);
 
-  // ── 새 문답 · 지난 문답 ──
   $("newBtn").onclick = () => {
     if (busy) return;
-    convId = newId();
-    store.set("socrates.current", convId);
-    render([]);
-    input.focus();
+    convId = newId(); store.set("socrates.current", convId);
+    render([]); input.focus();
   };
 
-  const wrap = $("drawerWrap");
+  // ── 지난 문답 ──
   $("pastBtn").onclick = () => {
     const list = store.get("socrates.list", []);
     const box = $("pastList");
-    box.innerHTML = "";
-    if (!list.length) {
-      box.innerHTML = '<p class="empty">아직 지난 문답이 없네.</p>';
-    }
+    box.innerHTML = list.length ? "" : '<p class="empty">아직 지난 문답이 없네.</p>';
     for (const c of list) {
       const b = document.createElement("button");
-      b.type = "button";
-      b.className = "past" + (c.id === convId ? " now" : "");
+      b.type = "button"; b.className = "past" + (c.id === convId ? " now" : "");
       b.textContent = c.title;
-      const s = document.createElement("small");
-      s.textContent = new Date(c.updated).toLocaleString("ko-KR", { month: "long", day: "numeric", hour: "numeric", minute: "2-digit" });
-      b.append(s);
-      b.onclick = () => {
-        if (busy) return;
-        convId = c.id;
-        store.set("socrates.current", convId);
-        wrap.classList.remove("open");
-        loadConversation();
-      };
+      const s = document.createElement("small"); s.textContent = fmtDate(c.updated); b.append(s);
+      b.onclick = () => { if (busy) return; convId = c.id; store.set("socrates.current", convId); $("pastWrap").hidden = true; loadConversation(); };
       box.append(b);
     }
-    wrap.classList.add("open");
+    $("pastWrap").hidden = false;
   };
-  $("drawerBg").onclick = () => wrap.classList.remove("open");
+  document.querySelectorAll("[data-close]").forEach((el) => el.onclick = () => { $("pastWrap").hidden = true; $("bookWrap").hidden = true; });
+
+  // ── 문답집에 올리기 ──
+  $("bookForm").onsubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await post("/api/book", { id: convId, title: $("bookTitleIn").value, name: $("bookName").value, note: $("bookNote").value });
+      $("bookWrap").hidden = true;
+      $("tobook").innerHTML = '<span class="okmsg">올렸네. 원장님이 읽고 문답집에 실을 걸세.</span>';
+    } catch (err) { $("bookMsg").textContent = err.message; }
+  };
+
+  // ── 마음 ──
+  function mdLite(src) {
+    // 제목(##) · 목록(- , 1.) · 굵게(**) 만 그린다. 글은 모두 이스케이프한다.
+    const out = [];
+    let list = null;
+    const inline = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+    const close = () => { if (list) { out.push(`</${list}>`); list = null; } };
+    for (const line of src.split("\n")) {
+      let m;
+      if (/^#{1,6}\s/.test(line)) { close(); out.push(`<h3>${inline(line.replace(/^#+\s*/, ""))}</h3>`); }
+      else if ((m = line.match(/^\s*-\s+(.*)/))) { if (list !== "ul") { close(); out.push("<ul>"); list = "ul"; } out.push(`<li>${inline(m[1])}</li>`); }
+      else if ((m = line.match(/^\s*\d+\.\s+(.*)/))) { if (list !== "ol") { close(); out.push("<ol>"); list = "ol"; } out.push(`<li>${inline(m[1])}</li>`); }
+      else if (!line.trim()) { close(); }
+      else { close(); out.push(`<p>${inline(line)}</p>`); }
+    }
+    close();
+    return out.join("");
+  }
+
+  function showMind(m, current) {
+    $("mindTitle").textContent = current ? `지금의 마음 · 판 ${m.v}` : `지난 마음 · 판 ${m.v}`;
+    $("mindMeta").textContent = `${fmtDate(m.at)} · ${m.by || ""}`;
+    $("mindBody").innerHTML = mdLite(m.text);
+  }
+
+  async function loadMind() {
+    try {
+      const j = await api("/api/mind");
+      showMind(j.current, true);
+      const h = $("mindHistory");
+      h.innerHTML = j.openProposals ? `<p class="meta" style="margin:0 0 8px">원장님이 읽을 제안 ${j.openProposals}개가 기다리고 있다.</p>` : "";
+      for (const v of j.versions) {
+        const d = document.createElement("div");
+        d.className = "hist";
+        d.innerHTML = `<div class="meta"><b>판 ${v.v}</b> · ${esc(fmtDate(v.at))} · ${esc(v.by || "")}</div><div class="why">${esc(v.note || "")}</div>`;
+        const b = document.createElement("button");
+        b.className = "linkish"; b.type = "button"; b.textContent = v.v === j.current.v ? "지금의 마음" : "이 판 읽기";
+        b.onclick = async () => { const m = await api("/api/mind/" + v.v); showMind(m, v.v === j.current.v); $("mindTitle").scrollIntoView({ behavior: "smooth" }); };
+        d.append(b);
+        h.append(d);
+      }
+    } catch (err) { $("mindBody").textContent = err.message; }
+  }
+
+  $("propForm").onsubmit = async (e) => {
+    e.preventDefault();
+    const msg = $("propMsg");
+    try {
+      await post("/api/proposals", { text: $("propText").value, name: $("propName").value });
+      $("propText").value = "";
+      msg.className = "okmsg"; msg.textContent = "고맙네. 원장님께 전했네.";
+      loadMind();
+    } catch (err) { msg.className = "note"; msg.style.margin = "0"; msg.textContent = err.message; }
+  };
+
+  // ── 문답집 ──
+  async function loadBook() {
+    const box = $("bookList");
+    try {
+      const j = await api("/api/book");
+      box.innerHTML = j.items.length ? "" : '<p class="empty">아직 실린 문답이 없네. 소크라테스와 나눈 문답을 첫 번째로 올려 주게.</p>';
+      for (const it of j.items) {
+        const b = document.createElement("button");
+        b.className = "item"; b.type = "button";
+        b.innerHTML = `<strong>${esc(it.title)}</strong><span class="meta">${esc(it.name)} · ${esc(fmtDate(it.at))} · 말 ${it.turns}번</span><p>${esc(it.note || it.first || "")}</p>`;
+        b.onclick = () => { location.hash = "book/" + it.id; };
+        box.append(b);
+      }
+    } catch (err) { box.textContent = err.message; }
+  }
+  async function readBook(id) {
+    const box = $("bookLog");
+    box.innerHTML = "";
+    try {
+      const b = await api("/api/book/" + encodeURIComponent(id));
+      $("bookTitle").textContent = b.title;
+      const used = [...new Set((b.minds || []).filter((x) => x))];
+      $("bookMeta").textContent = `${b.name} · ${fmtDate(b.at)}${used.length ? " · 마음 판 " + used.join(", ") : ""}`;
+      if (b.note) { const p = document.createElement("p"); p.className = "lead"; p.textContent = b.note; box.append(p); }
+      for (const m of b.view) addTurn(box, m.role, m.text, b.name || "묻는 이");
+    } catch (err) { box.textContent = err.message; }
+  }
+  $("bookBack").onclick = () => { location.hash = "book"; };
 
   // ── 문 ──
-  function showDoor() {
-    $("app").hidden = true;
-    $("door").hidden = false;
-    $("doorPw").focus();
-  }
+  function showDoor() { $("app").hidden = true; $("door").hidden = false; $("doorPw").focus(); }
   $("doorForm").addEventListener("submit", async (e) => {
     e.preventDefault();
-    const r = await fetch("/api/door", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password: $("doorPw").value }),
-    });
+    const r = await fetch("/api/door", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ password: $("doorPw").value }) });
     if (r.ok) { $("door").hidden = true; start(); }
-    else { const n = $("doorNote"); n.textContent = "비밀번호가 맞지 않네."; n.hidden = false; }
+    else { $("doorNote").textContent = "비밀번호가 맞지 않네."; $("doorNote").hidden = false; }
   });
 
   async function start() {
-    try {
-      const r = await fetch("/api/door");
-      const j = await r.json();
-      if (!j.open) return showDoor();
-    } catch {}
+    try { const j = await (await fetch("/api/door")).json(); if (!j.open) return showDoor(); } catch {}
     $("app").hidden = false;
     await loadConversation();
+    go(location.hash.slice(1) || "talk");
   }
   start();
 })();
