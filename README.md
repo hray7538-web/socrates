@@ -57,6 +57,16 @@ cd ~/socrates && npm install && ./켜기.sh
 | `SOCRATES_DAILY_TOTAL` | 모두 합쳐 하루 답 수 | 1500 |
 | `SOCRATES_DATA` | 쌓이는 곳 | ./data |
 
+## 밖에서 (마을 서버)
+
+- 주소: https://socrates.43-200-65-88.sslip.io (임시 주소. 이름 속 IP 가 곧 서버다)
+- 앞문 캐디가 `127.0.0.1:7970` 으로 넘긴다. 코드는 이 저장소를 `~/socrates` 로 받고, 쌓이는 것은 `~/socrates-data`.
+- 켜고 끄기: `~/socrates/scripts/마을.sh start | stop | restart | status | logs`
+- 지킴이: cron 이 1분마다 `scripts/지킴이.sh` 를 불러, 대답이 없으면 다시 켠다. 일부러 꺼 둘 때는 `touch ~/socrates-data/off`.
+- 열쇠는 서버의 금고(`~/금고/socrates_anthropic_api_key`, `~/금고/socrates_admin_password`)에만 있다.
+- 하루 한도: 한 사람 100답, 모두 합쳐 500답.
+- 고친 코드 올리기: 맥에서 커밋 · 푸시 → 마을에서 `cd ~/socrates && git pull && npm ci && scripts/마을.sh restart`
+
 ## 두뇌
 
 - 모델 `claude-opus-5-5`, 생각 깊이 medium, 스트리밍.
@@ -66,7 +76,8 @@ cd ~/socrates && npm install && ./켜기.sh
 
 ## 다음에 할 수 있는 것
 
-- 마을 서버에 올려 밖 주소로 열기.
-- 공개 저장소로 코드를 열고, 받아들인 마음의 판도 저장소에 남기기.
+- 받아들인 마음의 판도 이 저장소에 남기기(지금은 서버의 `data/마음/` 에만 있다).
+- 다른 사람이 코드를 가져다 써도 되는지 정하기(라이선스).
+- 고정 주소(예: socrates.yoyoi.jp).
 - 말로 묻고 소리로 듣기(네오처럼).
 - 문답이 끝나면 오늘 무엇을 검토했는지 한 장으로 남기기.

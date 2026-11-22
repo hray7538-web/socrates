@@ -404,6 +404,9 @@ const server = http.createServer(async (req, res) => {
       return fs.createReadStream(path.join(here, "public", PAGES[p])).pipe(res);
     }
 
+    // 지킴이가 두드리는 곳
+    if (p === "/api/health") return sendJson(res, 200, { ok: true, mind: currentMind().v });
+
     // 문
     if (p === "/api/door") {
       if (req.method === "GET") return sendJson(res, 200, { open: doorOpen(req), needed: !!PASSWORD });
