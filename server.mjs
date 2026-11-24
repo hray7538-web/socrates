@@ -196,6 +196,14 @@ function contentToKeep(content) {
   return content.filter((b, i) => i > last || !drop.has(b.type));
 }
 
+function withoutThinking(history) {
+  return history.map((m) => {
+    if (m.role !== "assistant" || !Array.isArray(m.content)) return m;
+    const kept = m.content.filter((b) => b.type !== "thinking" && b.type !== "redacted_thinking");
+    return kept.length ? { ...m, content: kept } : m;
+  });
+}
+
 const busy = new Set();
 
 async function chat(req, res, body) {
@@ -217,7 +225,10 @@ async function chat(req, res, body) {
   const send = (o) => res.write(JSON.stringify(o) + "\n");
 
   const mind = currentMind();
-  const messages = [...conv.history, { role: "user", content: text }];
+  // 문답 도중에 마음의 판이 바뀌면, 옛 판으로 한 생각 블록은 새 마음과 함께 보낼 수 없다(400).
+  // 그때는 지난 답의 생각 블록을 빼고 말만 이어 보낸다.
+  const mindChanged = (conv.minds || []).some((v) => v != null && v !== mind.v);
+  const messages = [...(mindChanged ? withoutThinking(conv.history) : conv.history), { role: "user", content: text }];
   const started = Date.now();
   let aborted = false;
   req.on("close", () => { if (!res.writableEnded) aborted = true; });
