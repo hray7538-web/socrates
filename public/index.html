@@ -578,6 +578,13 @@
     $("app").hidden = false;
     await loadConversation();
     go(location.hash.slice(1) || "talk");
+    // 주소에 ?q=물음 이 붙어 오면 새 문답의 입력 칸에 그 물음을 놓는다. 보내는 것은 사람이 누른다.
+    const q = (new URLSearchParams(location.search).get("q") || "").trim().slice(0, 500);
+    if (q) {
+      if (log.querySelector(".you")) $("newBtn").onclick();
+      input.value = q; autoGrow(); input.focus();
+      history.replaceState(null, "", location.pathname + location.hash);
+    }
   }
   start();
 })();
